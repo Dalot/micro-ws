@@ -101,3 +101,44 @@ func Test_packet_deregister(t *testing.T) {
 		})
 	}
 }
+
+func Test_packet_notifyAll(t *testing.T) {
+	is := require.New(t)
+
+	tests := []struct {
+		name                string
+		p                   *packet
+		registeredObservers []*observerMock
+		observableName      string
+	}{
+		{
+			name: "success",
+			p:    &packet{msg: []byte("a message"), name: "FOOTBALL"},
+			registeredObservers: []*observerMock{
+				{
+					updateFunc: func(bytes []byte) {
+						is.EqualValues(bytes, []byte("a message"))
+					},
+				},
+				{
+					updateFunc: func(bytes []byte) {
+						is.EqualValues(bytes, []byte("a message"))
+					},
+				},
+			},
+			observableName: "FOOTBALL",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, obs := range tt.registeredObservers {
+				err := tt.p.register(obs, tt.observableName)
+				is.NoError(err)
+			}
+			tt.p.notifyAll()
+			for _, obs := range tt.registeredObservers {
+				is.Len(obs.updateCalls(), 1)
+			}
+		})
+	}
+}
