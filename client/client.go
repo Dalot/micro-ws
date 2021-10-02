@@ -12,6 +12,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// TODO: reconnect functionality
+// instead of ending the program in a dead end with error
+// Failed to receive pong: write tcp 127.0.0.1:58146->127.0.0.1:8000: write: broken pipe2021/10/01 23:16:45 Conn 0 sending message
+
 var (
 	ip          = flag.String("ip", "127.0.0.1", "server IP")
 	connections = flag.Int("conn", 1, "number of websocket connections")
