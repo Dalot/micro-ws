@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports: 
+      - "8000:8000"
+  
+  backend:
+    build: 
+      context: ./backend
+    depends_on:
+      - demo
+    ports: 
+      - "8081:8081"
+
+  demo:
+    build: 
+      context: ./demo
+    depends_on:
+      - frontend
+    ports: 
+      - "8002:8002"
+      
+  client:
+    build: 
+      context: ./client
+    depends_on:
+      - frontend
+
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q" ,"ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  db-data:

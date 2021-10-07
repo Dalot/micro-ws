@@ -40,6 +40,12 @@ func (o *Observers) Set(name string, obs observer.IObserver) error {
 		return fmt.Errorf("observable %s not found", name)
 	}
 
+	for _, existentObs := range o.data[name] {
+		if existentObs.GetID() == obs.GetID() {
+			return fmt.Errorf("observer %s is already listening to %s", obs.GetID(), name)
+		}
+	}
+
 	o.data[name] = append(o.data[name], obs)
 
 	return nil

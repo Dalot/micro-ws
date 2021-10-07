@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -17,7 +19,7 @@ import (
 // Failed to receive pong: write tcp 127.0.0.1:58146->127.0.0.1:8000: write: broken pipe2021/10/01 23:16:45 Conn 0 sending message
 
 var (
-	ip          = flag.String("ip", "127.0.0.1", "server IP")
+	ip          = flag.String("ip", "frontend", "Frontend server IP")
 	connections = flag.Int("conn", 1, "number of websocket connections")
 )
 
@@ -56,11 +58,36 @@ Example usage: ./client -ip=172.17.0.1 -conn=10
 		for i := 0; i < len(conns); i++ {
 			time.Sleep(tts)
 			conn := conns[i]
-			log.Printf("Conn %d sending message", i)
+			log.Printf("Conn %d sending message", i+1)
 			if err := conn.WriteControl(websocket.PingMessage, nil, time.Now().Add(time.Second*5)); err != nil {
 				fmt.Printf("Failed to receive pong: %v", err)
 			}
-			conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("Hello from conn %v", i)))
+			
+			msg := Message{
+				"observable": "NBA",
+				"data": Message{
+					"team": "Chicago Bulls",
+					"result": "win",
+					"score": "111-108",
+					"home": true,
+				},
+			}
+
+			data, err := serialize(msg)
+			if err != nil {
+				fmt.Printf("Failed to serialize %v", msg)
+			}
+			conn.WriteMessage(websocket.TextMessage, data)
 		}
 	}
 }
+
+type Message map[string]interface{}
+
+func serialize(msg Message) ([]byte, error) {
+    var b bytes.Buffer
+    encoder := json.NewEncoder(&b)
+    err := encoder.Encode(msg)
+    return b.Bytes(), err
+}
+

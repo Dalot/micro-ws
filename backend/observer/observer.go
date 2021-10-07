@@ -36,7 +36,7 @@ func newPacket(msg []byte) *Packet {
 	}
 }
 
-func (p *Packet) register(o IObserver, name string) error {
+func (p *Packet) Register(o IObserver, name string) error {
 	if name == "" {
 		return errors.New("name must not be empty")
 	}
@@ -49,7 +49,7 @@ func (p *Packet) register(o IObserver, name string) error {
 	return nil
 }
 
-func (p *Packet) deregister(o IObserver, name string) error {
+func (p *Packet) Deregister(o IObserver, name string) error {
 	var list []IObserver
 	var err error
 
@@ -72,7 +72,7 @@ func (p *Packet) deregister(o IObserver, name string) error {
 	return fmt.Errorf("could not deregister, did not find any observer with id %s on the observable %s", o.GetID(), name)
 }
 
-func (p *Packet) notifyAll() error {
+func (p *Packet) NotifyAll() error {
 	observers, err := p.DB.GetByObservable(p.Name)
 	if err != nil {
 		return errors.Wrap(err, "notify all observers")
@@ -82,15 +82,4 @@ func (p *Packet) notifyAll() error {
 	}
 
 	return nil
-}
-
-func removeFromSlice(observerList []IObserver, observerToRemove IObserver) []IObserver {
-	observerListLength := len(observerList)
-	for i, obs := range observerList {
-		if observerToRemove.GetID() == obs.GetID() {
-			observerList[observerListLength-1], observerList[i] = observerList[i], observerList[observerListLength-1]
-			return observerList[:observerListLength-1]
-		}
-	}
-	return observerList
 }

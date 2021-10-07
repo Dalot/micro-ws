@@ -66,7 +66,7 @@ func Test_packet_register(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.p.register(tt.o, tt.observableName)
+			err := tt.p.Register(tt.o, tt.observableName)
 			if err != nil {
 				is.EqualError(err, tt.err)
 				return
@@ -152,7 +152,7 @@ func Test_packet_deregister(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.p.deregister(tt.observer, tt.observableName)
+			err := tt.p.Deregister(tt.observer, tt.observableName)
 			if err != nil {
 				is.EqualError(err, tt.err)
 				return
@@ -199,7 +199,7 @@ func Test_packet_notifyAll(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.p.notifyAll()
+			err := tt.p.NotifyAll()
 			if err != nil {
 				is.EqualError(err, tt.err)
 				return

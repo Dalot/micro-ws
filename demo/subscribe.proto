@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = ".;grpcapi";
+
+package backend;
+
+service Subscriber {
+  // Sends a greeting
+  rpc Subscribe (SubscribeRequest) returns (Response);
+}
+
+message SubscribeRequest {
+    string ID = 1;
+    string observable = 2;
+}
+
+message Response {
+    bool success = 1;
+    string message = 2;
+}

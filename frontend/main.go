@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -11,9 +12,13 @@ import (
 	"github.com/streadway/amqp"
 )
 
-var epoller *epoll
+var (
+	ip      = flag.String("ip", "rabbitmq", "RabbitMQ server IP")
+	epoller *epoll
+)
 
 func wsHandler(w http.ResponseWriter, r *http.Request) {
+
 	// Upgrade connection
 	conn, _, _, err := ws.UpgradeHTTP(r, w)
 	if err != nil {
@@ -26,6 +31,8 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	flag.Parse()
+	log.Printf("RabbitMQ IP: %s", *ip)
 	// Increase RLIMIT_NOFILE so we can have more open files -> more sockets
 	// RLIMIT_NOFILE specifies a value one greater than the maximum file
 	// descriptor number that can be opened by this process.
@@ -79,6 +86,7 @@ func Start() {
 				conn.Close()
 			} else {
 				log.Printf("msg: %s", string(msg))
+
 				produce(msg)
 			}
 		}
@@ -86,7 +94,7 @@ func Start() {
 }
 
 func produce(msg []byte) {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://guest:guest@" + *ip + ":5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
@@ -109,7 +117,7 @@ func produce(msg []byte) {
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing{
-			ContentType: "text/plain",
+			ContentType: "text/javascript",
 			Body:        msg,
 		})
 	failOnError(err, "Failed to publish a message")
@@ -120,3 +128,5 @@ func failOnError(err error, msg string) {
 		log.Fatalf("%s: %s", msg, err)
 	}
 }
+
+type Message map[string]interface{}
