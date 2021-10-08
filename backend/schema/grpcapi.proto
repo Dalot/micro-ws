@@ -5,7 +5,7 @@ option go_package = ".;grpcapi";
 package backend;
 
 service Subscriber {
-  // Sends a greeting
+  // Subscribes to a queue
   rpc Subscribe (SubscribeRequest) returns (Response);
 }
 
