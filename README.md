@@ -33,5 +33,4 @@ This service serves as a demonstration of a subscriber. It will call the `Backen
 `docker-compose up`
 
 ## Flow
-![Alt text](./diagram.svg)
-<img src="./diagram.svg">
+![A diagram presenting the flow of the current repository](./diagram.svg)
