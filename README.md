@@ -15,11 +15,11 @@ root
 ```
 ## Overview
 ### Client
-This service will generate ws messages forever and send them to the frontend.
+Client will generate ws messages each second forever and send them to the frontend.
 
 ### Frontend
-This is the service that will receive the ws messages and produce them in RabbitMQ. This service has a more low level implementation in order to have more throuput. 
-It uses epoll and `gobwas/ws` to achieve that instead of `net/http` and `gorilla/ws`. It also reduces de memory footprint by not using `net/http` and `gorilla/ws` buffers.
+This is the service that will receive the ws messages and act as a produces in RabbitMQ. 
+This service has a epoll implementation to listen for more file descriptors, inspired by [eranyanay](https://github.com/eranyanay/1m-go-websockets). As a result it has an increased throuput and a smaller memory footprint mostly due to the performant design in gobwas/ws library that allows to reuse the allocated buffers between connections.
 
 ### Backend
 Backend will consume from the RabbitMQ queue and notify all the registered subscribers to the correspondent queue.
