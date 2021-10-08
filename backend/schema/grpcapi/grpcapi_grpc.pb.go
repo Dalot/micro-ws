@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SubscriberClient interface {
-	// Sends a greeting
+	// Subscribes to a queue
 	Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
@@ -43,7 +43,7 @@ func (c *subscriberClient) Subscribe(ctx context.Context, in *SubscribeRequest, 
 // All implementations should embed UnimplementedSubscriberServer
 // for forward compatibility
 type SubscriberServer interface {
-	// Sends a greeting
+	// Subscribes to a queue
 	Subscribe(context.Context, *SubscribeRequest) (*Response, error)
 }
 

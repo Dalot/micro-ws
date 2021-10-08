@@ -17,17 +17,11 @@ var _ Database = &databaseMock{}
 //
 // 		// make and configure a mocked Database
 // 		mockedDatabase := &databaseMock{
-// 			GetAllFunc: func() map[string][]IObserver {
-// 				panic("mock out the GetAll method")
-// 			},
 // 			GetByObservableFunc: func(name string) ([]IObserver, error) {
 // 				panic("mock out the GetByObservable method")
 // 			},
 // 			SetFunc: func(name string, obs IObserver) error {
 // 				panic("mock out the Set method")
-// 			},
-// 			SetAllFunc: func(stringToIObservers map[string][]IObserver)  {
-// 				panic("mock out the SetAll method")
 // 			},
 // 			SetObservableFunc: func(name string, observers []IObserver) error {
 // 				panic("mock out the SetObservable method")
@@ -39,26 +33,17 @@ var _ Database = &databaseMock{}
 //
 // 	}
 type databaseMock struct {
-	// GetAllFunc mocks the GetAll method.
-	GetAllFunc func() map[string][]IObserver
-
 	// GetByObservableFunc mocks the GetByObservable method.
 	GetByObservableFunc func(name string) ([]IObserver, error)
 
 	// SetFunc mocks the Set method.
 	SetFunc func(name string, obs IObserver) error
 
-	// SetAllFunc mocks the SetAll method.
-	SetAllFunc func(stringToIObservers map[string][]IObserver)
-
 	// SetObservableFunc mocks the SetObservable method.
 	SetObservableFunc func(name string, observers []IObserver) error
 
 	// calls tracks calls to the methods.
 	calls struct {
-		// GetAll holds details about calls to the GetAll method.
-		GetAll []struct {
-		}
 		// GetByObservable holds details about calls to the GetByObservable method.
 		GetByObservable []struct {
 			// Name is the name argument value.
@@ -71,11 +56,6 @@ type databaseMock struct {
 			// Obs is the obs argument value.
 			Obs IObserver
 		}
-		// SetAll holds details about calls to the SetAll method.
-		SetAll []struct {
-			// StringToIObservers is the stringToIObservers argument value.
-			StringToIObservers map[string][]IObserver
-		}
 		// SetObservable holds details about calls to the SetObservable method.
 		SetObservable []struct {
 			// Name is the name argument value.
@@ -84,37 +64,9 @@ type databaseMock struct {
 			Observers []IObserver
 		}
 	}
-	lockGetAll          sync.RWMutex
 	lockGetByObservable sync.RWMutex
 	lockSet             sync.RWMutex
-	lockSetAll          sync.RWMutex
 	lockSetObservable   sync.RWMutex
-}
-
-// GetAll calls GetAllFunc.
-func (mock *databaseMock) GetAll() map[string][]IObserver {
-	if mock.GetAllFunc == nil {
-		panic("databaseMock.GetAllFunc: method is nil but Database.GetAll was just called")
-	}
-	callInfo := struct {
-	}{}
-	mock.lockGetAll.Lock()
-	mock.calls.GetAll = append(mock.calls.GetAll, callInfo)
-	mock.lockGetAll.Unlock()
-	return mock.GetAllFunc()
-}
-
-// GetAllCalls gets all the calls that were made to GetAll.
-// Check the length with:
-//     len(mockedDatabase.GetAllCalls())
-func (mock *databaseMock) GetAllCalls() []struct {
-} {
-	var calls []struct {
-	}
-	mock.lockGetAll.RLock()
-	calls = mock.calls.GetAll
-	mock.lockGetAll.RUnlock()
-	return calls
 }
 
 // GetByObservable calls GetByObservableFunc.
@@ -180,37 +132,6 @@ func (mock *databaseMock) SetCalls() []struct {
 	mock.lockSet.RLock()
 	calls = mock.calls.Set
 	mock.lockSet.RUnlock()
-	return calls
-}
-
-// SetAll calls SetAllFunc.
-func (mock *databaseMock) SetAll(stringToIObservers map[string][]IObserver) {
-	if mock.SetAllFunc == nil {
-		panic("databaseMock.SetAllFunc: method is nil but Database.SetAll was just called")
-	}
-	callInfo := struct {
-		StringToIObservers map[string][]IObserver
-	}{
-		StringToIObservers: stringToIObservers,
-	}
-	mock.lockSetAll.Lock()
-	mock.calls.SetAll = append(mock.calls.SetAll, callInfo)
-	mock.lockSetAll.Unlock()
-	mock.SetAllFunc(stringToIObservers)
-}
-
-// SetAllCalls gets all the calls that were made to SetAll.
-// Check the length with:
-//     len(mockedDatabase.SetAllCalls())
-func (mock *databaseMock) SetAllCalls() []struct {
-	StringToIObservers map[string][]IObserver
-} {
-	var calls []struct {
-		StringToIObservers map[string][]IObserver
-	}
-	mock.lockSetAll.RLock()
-	calls = mock.calls.SetAll
-	mock.lockSetAll.RUnlock()
 	return calls
 }
 
