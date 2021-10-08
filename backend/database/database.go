@@ -67,14 +67,14 @@ func (o *Observers) SetObservable(name string, observers []observer.IObserver) e
 	return nil
 }
 
-func (o *Observers) GetAll() map[string][]observer.IObserver {
+func (o *Observers) getAll() map[string][]observer.IObserver {
 	o.lock.RLock()
 	defer o.lock.Unlock()
 
 	return o.data
 }
 
-func (o *Observers) SetAll(data map[string][]observer.IObserver) {
+func (o *Observers) setAll(data map[string][]observer.IObserver) {
 	o.lock.Lock()
 	defer o.lock.Unlock()
 

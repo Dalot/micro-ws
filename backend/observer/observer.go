@@ -20,8 +20,6 @@ type Database interface {
 	GetByObservable(name string) ([]IObserver, error)
 	SetObservable(name string, observers []IObserver) error
 	Set(name string, obs IObserver) error
-	GetAll() map[string][]IObserver
-	SetAll(map[string][]IObserver)
 }
 
 type Packet struct {

@@ -17,7 +17,7 @@ func TestObservers_GetByObservable(t *testing.T) {
 		"SOCCER": {obs},
 		"NBA":    {},
 	}
-	db.SetAll(data)
+	db.setAll(data)
 	soccerObservers := []observer.IObserver{obs}
 
 	tests := []struct {
@@ -66,7 +66,7 @@ func TestObservers_Set(t *testing.T) {
 		"SOCCER": {},
 		"NBA":    {},
 	}
-	db.SetAll(data)
+	db.setAll(data)
 
 	tests := []struct {
 		name           string
@@ -133,7 +133,7 @@ func TestObservers_SetObservable(t *testing.T) {
 		"SOCCER": {},
 		"NBA":    {},
 	}
-	db.SetAll(data)
+	db.setAll(data)
 
 	tests := []struct {
 		name           string

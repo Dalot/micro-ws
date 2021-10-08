@@ -106,8 +106,8 @@ func main() {
 }
 
 type Message struct {
-	Observable string                 `json:"observable`
-	Data       map[string]interface{} `json:"data`
+	Observable string                 `json:"observable"`
+	Data       map[string]interface{} `json:"data"`
 }
 
 func serialize(msg map[string]interface{}) ([]byte, error) {
