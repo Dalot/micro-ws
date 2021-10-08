@@ -21,6 +21,7 @@ func (o *Observers) Init() {
 	}
 }
 
+// GetByObservable fetches the observers of one queue/observable
 func (o *Observers) GetByObservable(name string) ([]observer.IObserver, error) {
 	o.lock.RLock()
 	defer o.lock.RUnlock()
@@ -32,6 +33,7 @@ func (o *Observers) GetByObservable(name string) ([]observer.IObserver, error) {
 	return data, nil
 }
 
+// Set adds one oberserver to the given queue/observable
 func (o *Observers) Set(name string, obs observer.IObserver) error {
 	o.lock.Lock()
 	defer o.lock.Unlock()
@@ -51,6 +53,7 @@ func (o *Observers) Set(name string, obs observer.IObserver) error {
 	return nil
 }
 
+// SetObservable maps a list of observers to a queue 
 func (o *Observers) SetObservable(name string, observers []observer.IObserver) error {
 	o.lock.Lock()
 	defer o.lock.Unlock()
