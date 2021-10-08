@@ -14,7 +14,8 @@ services:
     build: 
       context: ./backend
     depends_on:
-      - demo
+      rabbitmq:
+        condition: service_healthy
     ports: 
       - "8081:8081"
 
@@ -37,9 +38,9 @@ services:
     restart: always
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q" ,"ping"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
     volumes:
       - db-data:/var/lib/mysql
     ports:

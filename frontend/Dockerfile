@@ -4,16 +4,6 @@ RUN apk add --no-cache git libc-dev gcc
 WORKDIR /go/src/app/
 COPY ./ /go/src/app
 
-FROM prep AS test
-
-COPY ./test-entrypoint.sh ./test-entrypoint.sh
-RUN chmod 0777 test-entrypoint.sh
-
-WORKDIR /go/src/app
-ENTRYPOINT ["./test-entrypoint.sh"]
-
-FROM prep AS build
-
 ARG COMMIT=""
 
 # Build the project and create binary

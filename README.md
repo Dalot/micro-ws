@@ -24,7 +24,7 @@ It uses epoll and `gobwas/ws` to achieve that instead of `net/http` and `gorilla
 ### Backend
 Backend will consume from the RabbitMQ queue and notify all the registered subscribers to the correspondent queue.
 It has a gRPC endpoint to register subscribers to queues.
-This services has tests and a rudimentary in-memory database to showcase the observer pattern.
+This service has tests and a rudimentary in-memory database to showcase the observer pattern.
 
 ### Demo
 This service serves as a demonstration of a subscriber. It will call the `Backend` to subscribe to a queue through gRPC and it will receive messages through ws.
